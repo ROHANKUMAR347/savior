@@ -3,6 +3,9 @@
 
 
 import { Box, Flex, Heading, Button, Link, Text, Img, VStack, HStack, Input, keyframes, AccordionButton, AccordionItem, AccordionIcon, AccordionPanel, Image, Accordion, IconButton } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
+import { FaEnvelope, FaTwitter } from 'react-icons/fa';
+import { FaTelegram } from 'react-icons/fa';
 
 function Home() {
     const scaleUp = keyframes`
@@ -13,6 +16,33 @@ function Home() {
       transform: scale(1.05);
     }
   `;
+
+    const initialTime = 3600; // 1 hour in seconds
+    const [time, setTime] = useState(initialTime);
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setTime((prevTime) => {
+                if (prevTime <= 0) {
+                    clearInterval(timer);
+                    return 0;
+                }
+                return prevTime - 1;
+            });
+        }, 1000);
+
+        return () => clearInterval(timer);
+    }, []);
+
+    const formatTime = (time) => {
+        const hours = Math.floor(time / 3600);
+        const minutes = Math.floor((time % 3600) / 60);
+        const seconds = time % 60;
+        return { hours, minutes, seconds };
+    };
+
+    const { hours, minutes, seconds } = formatTime(time);
+
 
     return (
         <>
@@ -210,12 +240,16 @@ function Home() {
 
                         >
                             <HStack spacing="1rem">
-                                <Box bg="black" p="1rem" borderRadius="md">
-                                    00
+                                <Box bg="black" p="1rem" borderRadius="md" color="white" textAlign="center" minWidth="3rem">
+                                    {String(hours).padStart(2, '0')}
                                 </Box>
-                                <Text>:</Text>
-                                <Box bg="black" p="1rem" borderRadius="md">
-                                    00
+                                <Text color="white">:</Text>
+                                <Box bg="black" p="1rem" borderRadius="md" color="white" textAlign="center" minWidth="3rem">
+                                    {String(minutes).padStart(2, '0')}
+                                </Box>
+                                <Text color="white">:</Text>
+                                <Box bg="black" p="1rem" borderRadius="md" color="white" textAlign="center" minWidth="3rem">
+                                    {String(seconds).padStart(2, '0')}
                                 </Box>
                             </HStack>
                             <Heading as="h2" size="md" color="red.500" fontSize={"48px"}>
@@ -381,6 +415,15 @@ function Home() {
                         justifyContent="space-between"
                         flexWrap="wrap"
                         alignItems="flex-start"
+                        width="100%"
+                        overflowX="auto"
+                        css={{
+                            '&::-webkit-scrollbar': {
+                                display: 'none',
+                            },
+                            '-ms-overflow-style': 'none',
+                            'scrollbar-width': 'none',
+                        }}
                     >
                         <Box
                             backgroundImage={"url(https://s3-alpha-sig.figma.com/img/4b01/5d0d/f2954eaf00df1cee6eb3039a08679aa7?Expires=1717977600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=hltJ8oxKc-BHNm~Ai2b3llLxsNkFOxJmnAsCjAs2dVQTC91LuaozbEVZk8krh1gGoubBurKUCjXF7-Bzo1TeYPn60cHSJTnQwXr3ctXW89XfIy6ncCKqCx9Yaej9iMsiO~LP5u6V5cjmKAGLQW1pHU1FrvRPuaLUwKyW28b6vU2lo~PXgJgsPEu0EJa-y9X3pOvfY64HrO9OhHX1IyJZAG7urzn1nwrfVXSAFiaMiu-juyPaVaWyfQFod9wmqa3e3KXEV3PKQgBAK1GlTj3NRwEFbk647tIt3SqBJQRU3x-xZ1026IwKemFWA2ytyUEuoVgcvsqsJVCYe2cC~puDQA__)"}
@@ -401,7 +444,6 @@ function Home() {
                                 animation: `${scaleUp} 0.3s forwards`,
                             }}
                         >
-
                             <Box mt={"auto"}>
                                 <Heading as="h3" size="md" color="white" mb="0.5rem">
                                     Phase 1
@@ -428,7 +470,6 @@ function Home() {
                                 animation: `${scaleUp} 0.3s forwards`,
                             }}
                         >
-
                             <Box mt={"auto"}>
                                 <Heading as="h3" size="md" color="white" mb="0.5rem">
                                     Phase 2
@@ -455,7 +496,6 @@ function Home() {
                                 animation: `${scaleUp} 0.3s forwards`,
                             }}
                         >
-
                             <Box mt={"auto"}>
                                 <Heading as="h3" size="md" color="white" mb="0.5rem">
                                     Phase 3
@@ -482,7 +522,6 @@ function Home() {
                                 animation: `${scaleUp} 0.3s forwards`,
                             }}
                         >
-
                             <Box mt={"auto"}>
                                 <Heading as="h3" size="md" color="white" mb="0.5rem">
                                     Phase 4
@@ -492,6 +531,7 @@ function Home() {
                         </Box>
                     </Flex>
                 </Box>
+
                 {/* faq */}
 
                 <Box
@@ -669,7 +709,7 @@ function Home() {
                             as="a"
                             href="https://twitter.com"
                             aria-label="Twitter"
-
+                            icon={<FaTwitter size={24} color="white" />}
                             variant="ghost"
                             color="white"
                             mx="0.5rem"
@@ -678,7 +718,7 @@ function Home() {
                             as="a"
                             href="https://telegram.org"
                             aria-label="Telegram"
-
+                            icon={<FaTelegram size={24} color="white" />}
                             variant="ghost"
                             color="white"
                             mx="0.5rem"
@@ -687,7 +727,7 @@ function Home() {
                             as="a"
                             href="mailto:info@example.com"
                             aria-label="Email"
-
+                            icon={<FaEnvelope size={24} color="white" />}
                             variant="ghost"
                             color="white"
                             mx="0.5rem"
